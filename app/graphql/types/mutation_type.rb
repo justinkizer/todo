@@ -1,8 +1,8 @@
 Types::MutationType = GraphQL::ObjectType.define do
-  name "Mutation"
+  name 'Mutation'
 
   field :createUser, UserType do
-    description "Creates a user using an input username and password"
+    description 'Creates a user using an input username and password'
     argument :username, !types.String
     argument :password, !types.String
 
@@ -12,7 +12,7 @@ Types::MutationType = GraphQL::ObjectType.define do
   end
 
   field :updateUser, UserType do
-    description "Updates a user using an input background preference"
+    description 'Updates a user using an input background preference'
     argument :backgroundPreference, !types.Int
 
     resolve ->(_obj, args, ctx) {
@@ -21,7 +21,7 @@ Types::MutationType = GraphQL::ObjectType.define do
   end
 
   field :signInUser, UserType do
-    description "Signs in an extant user using an input username and password"
+    description 'Signs in an extant user using an input username and password'
     argument :username, !types.String
     argument :password, !types.String
 
@@ -31,7 +31,7 @@ Types::MutationType = GraphQL::ObjectType.define do
   end
 
   field :signOutUser, UserType do
-    description "Signs out the currently authenticated user"
+    description 'Signs out the currently authenticated user'
 
     resolve ->(_obj, _args, ctx) {
       ctx[:signout_user].call
@@ -39,7 +39,7 @@ Types::MutationType = GraphQL::ObjectType.define do
   end
 
   field :createList, ListType do
-    description "Creates a list using an input title"
+    description 'Creates a list using an input title'
     argument :title, !types.String
 
     resolve ->(_obj, args, ctx) {
@@ -54,8 +54,8 @@ Types::MutationType = GraphQL::ObjectType.define do
   end
 
   field :updateList, ListType do
-    description "Updates a list using an input listId, title, and " +
-                "listOrderNumber"
+    description 'Updates a list using an input listId, title, and ' +
+                'listOrderNumber'
     argument :listId, !types.Int
     argument :title, types.String
     argument :listOrderNumber, types.Int
@@ -77,18 +77,18 @@ Types::MutationType = GraphQL::ObjectType.define do
   end
 
   field :deleteList, ListType do
-    description "Deletes a list using an unput listId"
+    description 'Deletes a list using an unput listId'
     argument :listId, !types.Int
 
     resolve ->(_obj, args, ctx) {
       if ctx[:current_user] && ctx[:current_user].lists.find(args[:listId])
-        List.find(args[:listId]).delete
+        List.find(args[:listId]).destroy
       end
     }
   end
 
   field :createTask, TaskType do
-    description "Creates a task using an input listId and body"
+    description 'Creates a task using an input listId and body'
     argument :listId, !types.Int
     argument :body, !types.String
 
@@ -105,8 +105,8 @@ Types::MutationType = GraphQL::ObjectType.define do
   end
 
   field :updateTask, TaskType do
-    description "Updates a task using an input taskId, body, and " +
-                "taskOrderNumber"
+    description 'Updates a task using an input taskId, body, and ' +
+                'taskOrderNumber'
     argument :taskId, !types.Int
     argument :body, types.String
     argument :taskOrderNumber, types.Int
@@ -128,13 +128,13 @@ Types::MutationType = GraphQL::ObjectType.define do
   end
 
   field :deleteTask, TaskType do
-    description "Deletes a task using an input taskId"
+    description 'Deletes a task using an input taskId'
     argument :taskId, !types.Int
 
     resolve ->(_obj, args, ctx) {
       user = ctx[:current_user]
       if user && user.tasks.find(args[:taskId])
-        Task.find(args[:taskId]).delete
+        Task.find(args[:taskId]).destroy
       end
     }
   end

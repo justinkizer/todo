@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Todo</title>
+    <title>Tōdō - A To-Do List App</title>
     <%= csrf_meta_tags %>
 
     <%= stylesheet_link_tag    'application', media: 'all' %>
+    <link href='https://fonts.googleapis.com/css?family=Pacifico'
+          rel='stylesheet'
+    >
     <%= javascript_include_tag 'application' %>
   </head>
 
-  <body>
+  <body id='page_body' class='bg0'>
     <%= yield %>
   </body>
 </html>

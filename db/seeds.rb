@@ -15,7 +15,11 @@ def create_task(list_id, body, task_order_number)
   )
 end
 
-@picard = User.create(username: 'JeanLucPicard', password: '123123123123')
+@picard = User.create(
+  username: 'JeanLucPicard',
+  password: '123123123123',
+  background_preference: 3
+)
 @picards_list_01 = List.create(
   title: 'Captain\'s Log (of stuff to do)',
   author_id: @picard.id,
@@ -23,6 +27,12 @@ end
 )
 @picards_list_02 = List.create(
   title: 'Shore Leave Itinerary',
+  author_id: @picard.id,
+  list_order_number: 1
+)
+
+@picards_list_03 = List.create(
+  title: 'Tōdō To-Dos',
   author_id: @picard.id,
   list_order_number: 1
 )
@@ -36,10 +46,26 @@ picards_list_01_tasks = [
 ]
 
 picards_list_02_tasks = [
-  'Search for Artifacts (they belong in a museum)',
-  'Read Shakespeare',
+  'Search for Artifacts (they belong in a museum!)',
+  'Read Shakespeare (aloud to my goldfish)',
   'Meet Beverly on the Holodeck as Dixon Hill',
   'Dust starship models'
+]
+
+picards_list_03_tasks = [
+  'Set up batched queries to increase efficiency related to server pings',
+  'Further decompose the code into additional files and import the fragments'
+    .concat(' as necessary (e.g. the gql queries/mutations would be cleaner')
+    .concat(' and more manageable in their own files elsewhere)'),
+  'Implement more graceful fail states (e.g. provide more specific responses,'
+    .concat(' with better presentation, etc.)'),
+  'DRY up more code by combining similar components and forms, potentionally'
+    .concat(' wrapping them in custom HOCs (e.g. the lists/list components,')
+    .concat(' etc.)'),
+  'Add "delete confirmations" modals for lists/tasks deletion',
+  'Add Drag-and-Drop ordering/prioritization for lists/tasks',
+  'Implement a full test suite, using RSPEC, Enzyme, and Jest',
+  'Create Github README'
 ]
 
 picards_list_01_tasks.each_with_index do |body, index|
@@ -50,7 +76,15 @@ picards_list_02_tasks.each_with_index do |body, index|
   create_task(@picards_list_02.id, body, index)
 end
 
-@data = User.create(username: 'Data', password: 'spot123')
+picards_list_03_tasks.each_with_index do |body, index|
+  create_task(@picards_list_03.id, body, index)
+end
+
+@data = User.create(
+  username: 'Data',
+  password: 'spot123',
+  background_preference: 4
+)
 @datas_list_01 = List.create(
   title: 'Data\'s Daily Duties',
   list_order_number: 0,

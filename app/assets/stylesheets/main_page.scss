@@ -1,0 +1,270 @@
+$text-shadow:
+  -1px -1px 0 #000,
+  1px -1px 0 #000,
+  -1px 1px 0 #000,
+  1px 3px 2px #000;
+
+$lighter-text-shadow:
+  -1px -1px 0 rgba(0,0,0,0.75),
+  1px -1px 0 rgba(0,0,0,0.75),
+  -1px 1px 0 rgba(0,0,0,0.75),
+  1px 1px 2px rgba(0,0,0,0.75);
+
+.main-page-container > button {
+  position: absolute;
+  top: 1%; right: 1%;
+  background-color: rgba(0,0,0,0);
+  font-family: 'Pacifico', cursive;
+  font-size: 100%;
+  color: white;
+  border: none;
+  text-shadow: $lighter-text-shadow;
+  border-bottom: 1px solid white;
+  padding-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.main-page-container > button:first-of-type {
+  top: 4.5%;
+}
+
+.main-page-container > button:hover {
+  cursor: pointer;
+  color: lightgray;
+}
+
+.main-page-container > strong {
+  position: absolute;
+  top: 0%; right: 11%;
+  font-family: 'Pacifico', cursive;
+  color: white;
+  font-size: 250%;
+  text-shadow: $text-shadow;
+}
+
+.lists-nav > li:first-of-type {
+  position: absolute;
+  top: 2.75%; left: 18%;
+  font-family: 'Pacifico', cursive;
+  color: white;
+  font-size: 250%;
+  text-shadow: $text-shadow;
+  border-bottom: 2px solid white;
+  margin: 0px;
+  padding: 0px;
+  width: 63%;
+}
+
+.lists-nav {
+  position: absolute;
+  top: 0px; left: 0px;
+  height: 105vh;
+  width: 20%;
+  background-image: url("https://www.transparenttextures.com/patterns/45-degree-fabric-light.png");
+  background-color: rgba(255,255,255,0.55);
+  transform: translateY(-5%);
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+}
+
+.lists-nav > li {
+  position: relative;
+  top: 12%; left: -10.5%;
+  list-style: none;
+  margin-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 2px dotted white;
+  width: 95%;
+}
+
+.lists-nav > li:last-of-type {
+  border-bottom: none;
+}
+
+.lists-nav input {
+  background-color: rgba(255,255,255, 0.55);
+  border: 1px solid rgba(0,0,0, 0.55);
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-family: Helvetica;
+  color: black;
+  width: 95%;
+}
+
+.lists-nav button {
+  background-color: rgba(255,255,255, 0.55);
+  border: 1px solid rgba(0,0,0, 0.55);
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bolder;
+  font-family: Helvetica;
+  color: white;
+  text-shadow: $lighter-text-shadow;
+  width: 100%;
+}
+
+.lists-nav button:hover {
+  cursor: pointer;
+  color: white;
+  background-color: lightgray;
+}
+
+.tasks-nav > li:first-of-type {
+  position: absolute;
+  top: 0.5%; left: 2%;
+  font-family: 'Pacifico', cursive;
+  color: white;
+  font-size: 250%;
+  text-shadow: $text-shadow;
+  border-bottom: 2px solid white;
+  height: 11%;
+  margin: 0px;
+  padding: 0px;
+  width: 96%;
+}
+
+.tasks-nav {
+  position: absolute;
+  top: 9.15%; left: 24%;
+  height: 87vh;
+  width: 72.25%;
+  background-image: url("https://www.transparenttextures.com/patterns/45-degree-fabric-light.png");
+  background-color: rgba(255,255,255,0.55);
+  overflow-y: scroll;
+  border-radius: 50px;
+  display: flex;
+  flex-direction: column;
+}
+
+.tasks-nav > li {
+  position: relative;
+  top: 12%; left: -2%;
+  list-style: none;
+  margin-top: 15px;
+  padding-bottom: 15px;
+  border-bottom: 2px dotted white;
+  width: 97%;
+}
+
+.tasks-nav > li:last-of-type {
+  border-bottom: none;
+}
+
+.tasks-nav input {
+  background-color: rgba(255,255,255, 0.55);
+  border: 1px solid rgba(0,0,0, 0.55);
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-family: Helvetica;
+  color: black;
+  text-align: left;
+  width: 98.75%;
+  font-family: Helvetica;
+  color: rgba(0,0,0,0.85);
+}
+
+.tasks-nav button {
+  background-color: rgba(255,255,255, 0.55);
+  border: 1px solid rgba(0,0,0, 0.55);
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bolder;
+  font-family: Helvetica;
+  color: white;
+  text-align: left;
+  text-shadow: $lighter-text-shadow;
+  width: 100%;
+}
+
+.tasks-nav button:hover {
+  cursor: pointer;
+  color: white;
+  background-color: lightgray;
+}
+
+.delete-button {
+  position: absolute;
+  max-width: 30px;
+  margin-left: 4px;
+}
+
+.delete-button strong {
+  margin-left: -4px;
+  padding: 8px;
+}
+
+.delete-button strong:hover {
+  color: lightcoral;
+}
+
+.add-button {
+  position: absolute;
+  max-width: 30px;
+  margin-left: 4px;
+}
+
+.add-button strong {
+  margin-left: -5px;
+  padding: 8px;
+}
+
+.add-button strong:hover {
+  color: lightgreen;
+}
+
+.close-modal-button {
+  position: absolute;
+  max-width: 30px;
+  top: 3%; right: 1.75%;
+}
+
+.close-modal-button strong {
+  margin-left: -5px;
+  padding: 8px;
+}
+
+.close-modal-button strong:hover {
+  color: darkgray;
+}
+
+.list-name {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.list-name > strong {
+  box-sizing: border-box;
+  color: rgba(255,255,255,1);
+  position: absolute;
+  top: -4%; right: 5%;
+}
+
+.list-name > form > input:focus {
+  background-color: rgba(0,0,0,0.10);
+}
+
+.list-name > strong:hover {
+  color: rgba(255,255,255,0.85);
+  cursor: pointer;
+}
+
+.list-name > form > input {
+  position: absolute;
+  top: -5%; left: 0%;
+  font-family: 'Pacifico', cursive;
+  color: white;
+  background-color: rgba(255,255,255,0);
+  border: none;
+  font-size: 125%;
+  text-shadow: $text-shadow;
+  margin: 0px;
+  padding: 0px;
+  width: 96%;
+}

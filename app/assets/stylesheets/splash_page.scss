@@ -1,0 +1,45 @@
+button:hover {
+  cursor: pointer;
+  color: darkgray;
+}
+
+.splash-page-container {
+  position: absolute;
+  top: 28%; left: 0px;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.session-form {
+  position: absolute;
+  top: 110%; left: 33.5%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  width: 475px;
+}
+
+.session-form > input, .session_form > button {
+  font-family: Helvetica;
+  font-weight: bolder;
+  background-color: rgba(255,255,255,0.85);
+  border-radius: 5px;
+  min-width: 60px;
+  line-height: 15px;
+}
+
+.splash-page-logo {
+  width: 875px;
+  height: 235px;
+}

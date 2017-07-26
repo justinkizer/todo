@@ -1,10 +1,18 @@
+require 'json'
+
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
-  helper_method :signed_in?, :current_user
+  helper_method :signed_in?, :current_user, :current_user_json
 
   def current_user
     @current_user ||= User.find_by_session_token(session[:session_token])
+  end
+
+  def current_user_json
+    @current_user ||= User.find_by_session_token(session[:session_token])
+    { id: @current_user.id, username: @current_user.username,
+      backgroundPreference: @current_user.background_preference }.to_json
   end
 
   def signed_in?
