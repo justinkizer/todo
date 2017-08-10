@@ -10,9 +10,25 @@ $lighter-text-shadow:
   -1px 1px 0 rgba(0,0,0,0.75),
   1px 1px 2px rgba(0,0,0,0.75);
 
-.main-page-container > button {
-  position: absolute;
-  top: 1%; right: 1%;
+.main-page-container {
+  position: relative;
+  min-width: 100vw;
+  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.nav-button-container {
+  margin-top: 0.5em;
+  margin-right: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.nav-button-container > button {
   background-color: rgba(0,0,0,0);
   font-family: 'Pacifico', cursive;
   font-size: 100%;
@@ -25,18 +41,14 @@ $lighter-text-shadow:
   padding-right: 0px;
 }
 
-.main-page-container > button:first-of-type {
-  top: 5.5%;
-}
-
 .main-page-container > button:hover {
   cursor: pointer;
   color: lightgray;
 }
 
 .main-page-container > strong {
-  position: absolute;
-  top: 0%; right: 13%;
+  margin-top: 0em;
+  margin-right: 1em;
   font-family: 'Pacifico', cursive;
   color: white;
   font-size: 250%;
@@ -44,54 +56,77 @@ $lighter-text-shadow:
 }
 
 .lists-nav > li:first-of-type {
-  position: absolute;
-  top: 2.75%; left: 18%;
   font-family: 'Pacifico', cursive;
   color: white;
   font-size: 230%;
   text-shadow: $text-shadow;
   border-bottom: 2px solid white;
   margin: 0px;
-  padding: 0px;
-  width: 63%;
+  margin-top: -0.05em;
+  margin-bottom: 0.5em;
+  margin-left: 0.6em;
+  min-height: 0px;
+  width: 65%;
 }
 
 .lists-nav {
-  position: absolute;
-  top: 0px; left: 0px;
-  height: 105vh;
-  width: 20%;
+  margin: 0px;
+  -webkit-margin-before: 0px;
+  -webkit-margin-after: 0px;
+  -webkit-margin-start: 0px;
+  -webkit-margin-end: 0px;
+  -webkit-padding-start: 0px;
+  margin-right: auto;
+  width: 20.2%;
+  flex: 0 0.01 18.25em;
+  padding-right: 2.3em;
   background-image: url("https://www.transparenttextures.com/patterns/45-degree-fabric-light.png");
   background-color: rgba(255,255,255,0.55);
-  transform: translateY(-5%);
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .lists-nav > li {
-  position: relative;
-  top: 12%; left: -10.5%;
+  flex-shrink: 0;
   list-style: none;
-  margin-top: 10px;
-  padding-bottom: 10px;
+  min-height: 3.15em;
+  margin-left: 0.05em;
   border-bottom: 2px dotted white;
-  width: 95%;
+  width: 92%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .lists-nav > li:last-of-type {
   border-bottom: none;
 }
 
+.lists-nav > li > form {
+  list-style: none;
+  margin-top: 10px;
+  padding-bottom: 10px;
+  width: 95%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
 .lists-nav input {
   background-color: rgba(255,255,255, 0.55);
   border: 1px solid rgba(0,0,0, 0.55);
+  margin-left: -0.15em;
   padding: 5px;
   border-radius: 5px;
   font-size: 16px;
   font-family: Helvetica;
   color: black;
-  width: 95%;
+  width: 100%;
 }
 
 .lists-nav button {
@@ -189,11 +224,31 @@ $lighter-text-shadow:
   background-color: lightgray;
 }
 
+.task-item-form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.task-item-form button {
+  margin-left: 0.5em;
+}
+
+.task-create-item-form {
+  margin-left: -0.4em;
+  width: 99.75%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.task-create-item-form button {
+  margin-left: -0.5em;
+}
+
 .delete-button {
-  position: absolute;
   max-width: 30px;
-  margin-left: 4px;
-  top: 0%; right: -4%;
+  margin-right: -2.4em;
 }
 
 .delete-button strong {
@@ -206,10 +261,8 @@ $lighter-text-shadow:
 }
 
 .add-button {
-  position: absolute;
   max-width: 30px;
-  margin-left: 4px;
-  top: 0%; right: -4%;
+  margin-right: -3.5em;
 }
 
 .add-button strong {

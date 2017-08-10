@@ -115,7 +115,9 @@ class ListModal extends React.Component {
           <strong>X</strong>
         </button>
         <li key={ 'newTask' }>
-          <form onSubmit={ this.handleCreateTask.bind(this) }>
+          <form onSubmit={ this.handleCreateTask.bind(this) }
+                className='task-create-item-form'
+          >
             <input onChange={ this.update().bind(this) }
                    placeholder='Create a New Task Here'
                    value={ this.state.body }
@@ -137,7 +139,9 @@ class ListModal extends React.Component {
                 value = task.body;
               }
               return (<li key={ task.id }>
-                <form onSubmit={ this.handleUpdate(task.id, 'task') }>
+                <form onSubmit={ this.handleUpdate(task.id, 'task') }
+                      className='task-item-form'
+                >
                   <input type='text'
                          onChange={ this.update(task.id, 'task').bind(this) }
                          onBlur={ this.handleUpdate(task.id, 'task') }

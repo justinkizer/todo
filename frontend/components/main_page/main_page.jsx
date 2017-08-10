@@ -45,8 +45,10 @@ class MainPage extends React.Component {
                                    selectedList={ this.state.selectedList }
         />
         <strong>Welcome, { this.username }!</strong>
-        <SignOutButton />
-        <BGButton changeBackground={ this.changeBackground } />
+        <nav className='nav-button-container'>
+          <BGButton changeBackground={ this.changeBackground } />
+          <SignOutButton />
+        </nav>
         { listModal }
       </div>
     );

@@ -42,7 +42,7 @@ picards_list_01_tasks = [
   'Replicate some Tea (Earl Grey, Hot)',
   'Avoid children',
   'Shoot down some of Warf\'s ideas',
-  'Practice the Ressikan flute'
+  'Practice my Ressikan flute'
 ]
 
 picards_list_02_tasks = [
