@@ -5,15 +5,25 @@ class ListModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = { title: this.props.selectedList.title, body: '' };
+    this.timers = [];
+    this.handleCreateTask = this.handleCreateTask.bind(this);
+    this.update = this.update.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
     this.setState({ title: newProps.selectedList.title });
   }
 
+  componentWillUnmount() {
+    this.timers.forEach(timer => {
+      clearInterval(timer);
+    });
+  }
+
   update(id, updateType) {
     return e => {
       if (updateType === 'task') {
+        this.changed = true;
         this.setState({ [id]: { body: e.target.value }});
       } else if (updateType === 'list') {
         this.setState({ title: e.target.value });
@@ -37,37 +47,46 @@ class ListModal extends React.Component {
       });
   }
 
-  handleUpdate(taskId, updateType) {
+  handleUpdate(taskId, updateType, taskOrderNumber, body) {
     return e => {
-      e.preventDefault();
-      if (updateType === 'task') {
-        this.props.updateTaskMutation({
-          variables: {
-            taskId: taskId,
-            body: this.state[taskId].body
-          }
-        })
-          .then(() => {
-            document.activeElement.blur();
-          });
-      } else {
-        document.getElementById('list_name').disabled=true;
-        this.props.updateListMutation({
-          variables: {
-            listId: this.props.id,
-            title: this.state.title
-          }
-        })
-          .then(() => {
-            this.props.updateParent({
-              selectedList: {
-                id: this.props.id,
-                title: this.state.title
-              }
+      if (e) { e.preventDefault(); }
+      if (!this.justUpdated && this.changed) {
+        if (updateType === 'task') {
+          if (!body) { body = this.state[taskId].body; }
+          this.props.updateTaskMutation({
+            variables: {
+              taskId,
+              body,
+              taskOrderNumber
+            }
+          })
+            .then(() => {
+              this.justUpdated = true;
+              this.timers.push(setTimeout(() => {
+                this.justUpdated = false;
+              }, 500));
+              document.activeElement.blur();
             });
-            document.activeElement.blur();
-          });
+        } else {
+          document.getElementById('list_name').disabled = true;
+          this.props.updateListMutation({
+            variables: {
+              listId: this.props.id,
+              title: this.state.title
+            }
+          })
+            .then(() => {
+              this.props.updateParent({
+                selectedList: {
+                  id: this.props.id,
+                  title: this.state.title
+                }
+              });
+              document.activeElement.blur();
+            });
+        }
       }
+      if (!this.changed) { document.activeElement.blur(); }
     };
   }
 
@@ -78,6 +97,45 @@ class ListModal extends React.Component {
       .then(() => {
         this.props.data.refetch();
       });
+  }
+
+  currentOrder(taskOrderNumber, e) {
+    if (taskOrderNumber !== this.currentOrderNumber) {
+      this.currentOrderNumber = taskOrderNumber;
+      e.target.parentNode.parentNode.className = 'task-darken';
+    }
+  }
+
+  updateOrderNumber(taskId, taskOrderNumber) {
+    return () => {
+      if (taskOrderNumber !== this.currentOrderNumber) {
+        this.changed = true;
+        let offset = taskOrderNumber - this.currentOrderNumber;
+        [...this.props.data.list.tasks].forEach(task => {
+          const draggingDownUpdateRequired = () => {
+            return offset < 0 && task.taskOrderNumber <= this.currentOrderNumber
+              && task.taskOrderNumber >= taskOrderNumber;
+          };
+          const draggingUpUpdateRequired = () => {
+            return offset > 0 && task.taskOrderNumber >= this.currentOrderNumber
+              && task.taskOrderNumber <= taskOrderNumber;
+          };
+          if (task.id === taskId) {
+            this.handleUpdate(task.id, 'task', this.currentOrderNumber,
+              this.state[taskId].body
+            )();
+          } else if (draggingDownUpdateRequired()) {
+            this.handleUpdate(task.id, 'task', task.taskOrderNumber - 1,
+              task.body
+            )();
+          } else if (draggingUpUpdateRequired()) {
+            this.handleUpdate(task.id, 'task', task.taskOrderNumber + 1,
+              task.body
+            )();
+          }
+        });
+      }
+    };
   }
 
   render() {
@@ -92,7 +150,7 @@ class ListModal extends React.Component {
           <form onSubmit={ this.handleUpdate(this.props.id, 'list') }>
             <input id='list_name'
                    disabled
-                   onChange={ this.update(this.props.id, 'list').bind(this) }
+                   onChange={ this.update(this.props.id, 'list') }
                    onFocus={ () => this.setState({
                      title: this.props.selectedList.title
                    })}
@@ -101,7 +159,8 @@ class ListModal extends React.Component {
             </input>
           </form>
           <strong onClick={() => {
-            document.getElementById('list_name').disabled=false;
+            this.changed = true;
+            document.getElementById('list_name').disabled = false;
             document.getElementById('list_name').focus();
           }}>
             ✎
@@ -114,11 +173,13 @@ class ListModal extends React.Component {
         >
           <strong>X</strong>
         </button>
-        <li key={ 'newTask' }>
-          <form onSubmit={ this.handleCreateTask.bind(this) }
+        <li key={ 'newTask' }
+            className='create-task-li'
+        >
+          <form onSubmit={ this.handleCreateTask }
                 className='task-create-item-form'
           >
-            <input onChange={ this.update().bind(this) }
+            <input onChange={ this.update() }
                    placeholder='Create a New Task Here'
                    value={ this.state.body }
             >
@@ -129,35 +190,52 @@ class ListModal extends React.Component {
           </form>
         </li>
         { [...this.props.data.list.tasks].sort((x, y) => {
-            return x.id - y.id;
+            return x.taskOrderNumber - y.taskOrderNumber;
           })
             .map(task => {
-              let value;
-              if (this.state[task.id]) {
-                value = this.state[task.id].body;
-              } else {
-                value = task.body;
-              }
-              return (<li key={ task.id }>
-                <form onSubmit={ this.handleUpdate(task.id, 'task') }
-                      className='task-item-form'
+              let value = this.state[task.id] ? this.state[task.id].body : null;
+              value = value || task.body;
+              return (
+                <li key={ task.id }
+                    onDragOver={ e => { e.target.className = 'task-darken'; }}
+                    onDragLeave={ e => { e.target.className = ''; }}
                 >
-                  <input type='text'
-                         onChange={ this.update(task.id, 'task').bind(this) }
-                         onBlur={ this.handleUpdate(task.id, 'task') }
-                         onFocus={ () => this.setState({
-                           [task.id]: { body: task.body }
-                         })}
-                         value={ value }
-                  ></input>
-                  <button type='button'
-                          className='delete-button'
-                          onClick={ () => this.handleDelete(task.id) }
+                  <form onSubmit={ this.handleUpdate(task.id, 'task',
+                                    task.taskOrderNumber
+                                 )}
+                        className='task-item-form'
                   >
-                    <strong>X</strong>
-                  </button>
-                </form>
-              </li>);
+                    <input type='text'
+                           draggable={ true }
+                           onDragOver={
+                             e => this.currentOrder(task.taskOrderNumber, e)
+                           }
+                           onDragLeave={
+                             e => {
+                               e.target.parentNode.parentNode.className = '';
+                             }
+                           }
+                           onDragEnd={ this.updateOrderNumber(task.id,
+                                        task.taskOrderNumber
+                                     )}
+                           onChange={ this.update(task.id, 'task') }
+                           onBlur={ this.handleUpdate(task.id, 'task',
+                                      task.taskOrderNumber
+                                  )}
+                           onFocus={ () => {
+                             this.changed = false;
+                             this.setState({ [task.id]: { body: task.body }});
+                           }}
+                           value={ value }
+                    ></input>
+                    <button type='button'
+                            className='delete-button'
+                            onClick={ () => this.handleDelete(task.id) }
+                    >
+                      <strong>X</strong>
+                    </button>
+                  </form>
+                </li>);
             })
         }
       </ul>
@@ -172,6 +250,7 @@ const ListModalWithDataAndMutations = compose(
         tasks {
           id
           body
+          taskOrderNumber
         }
       }
     }`
@@ -186,10 +265,16 @@ const ListModalWithDataAndMutations = compose(
     { name: 'createTaskMutation' }
   ),
   graphql(gql`
-    mutation updateTask($taskId: Int!, $body: String!) {
-      updateTask(taskId: $taskId, body: $body) {
+    mutation updateTask($taskId: Int!, $body: String!, $taskOrderNumber: Int!) {
+      updateTask(
+        taskId: $taskId,
+        body: $body,
+        taskOrderNumber: $taskOrderNumber
+      )
+      {
         id
         body
+        taskOrderNumber
       }
     }`,
     { name: 'updateTaskMutation' }

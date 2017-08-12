@@ -6,12 +6,16 @@ class SessionForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = { username: '', password: '' };
+    this.timers = [];
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.update = this.update.bind(this);
+    this.demoSignIn = this.demoSignIn.bind(this);
   }
 
   componentWillUnmount() {
-    for (let i = 1; i < 5; i++) {
-      clearInterval(this[`timer0${i}`]);
-    }
+    this.timers.forEach(timer => {
+      clearInterval(timer);
+    });
   }
 
   update(field) {
@@ -24,7 +28,7 @@ class SessionForm extends React.Component {
     let dataType;
     dataType = mutType === 'signInUserMutation' ? 'signInUser' : 'createUser';
     return e => {
-      e.preventDefault();
+      if (e) { e.preventDefault(); }
       if (this.state.password.length < 6) {
         window.alert('Passwords must be at least 6 characters');
         return null;
@@ -51,41 +55,41 @@ class SessionForm extends React.Component {
     let passwordIndex = 0;
     let username = 'JeanLucPicard';
     let password = '123123123123';
-    this.timer01 = setInterval(() => {
+    this.timers.push(setInterval(() => {
       this.setState({ username: username.slice(0,usernameIndex) });
       usernameIndex++;
-    }, 40);
-    this.timer02 = setTimeout(() => {
-      this.timer03 = setInterval(() => {
+    }, 40));
+    this.timers.push(setTimeout(() => {
+      this.timers.push(setInterval(() => {
         this.setState({ password: password.slice(0,passwordIndex) });
         passwordIndex++;
-      }, 40);
-    }, 550);
-    this.timer04 = setTimeout(() => {
-      this.handleSubmit('signInUserMutation')({ preventDefault: () => null });
-    }, 1250);
+      }, 40));
+    }, 550));
+    this.timers.push(setTimeout(() => {
+      this.handleSubmit('signInUserMutation')();
+    }, 1250));
   }
 
   render() {
     return (
-      <form onSubmit={ this.handleSubmit('signInUserMutation').bind(this)}
+      <form onSubmit={ this.handleSubmit('signInUserMutation') }
             className='session-form'
       >
         <input type='text'
                placeholder='Username'
                value={ this.state.username }
-               onChange={ this.update('username').bind(this) }
+               onChange={ this.update('username') }
         />
         <input type='password'
                  placeholder='Password'
                  value={ this.state.password }
-                 onChange={ this.update('password').bind(this) }
+                 onChange={ this.update('password') }
           />
         <button type='submit'>Sign In</button>
-        <button onClick={ this.handleSubmit('signUpUserMutation').bind(this) }>
+        <button onClick={ this.handleSubmit('signUpUserMutation') }>
           Sign Up
         </button>
-        <button onClick={ this.demoSignIn.bind(this) }>Demo</button>
+        <button onClick={ this.demoSignIn }>Demo</button>
       </form>
     );
   }

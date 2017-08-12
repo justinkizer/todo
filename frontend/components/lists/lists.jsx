@@ -63,13 +63,14 @@ class Lists extends React.Component {
         </li>
         { this.props.data.lists.map(list =>
           <li key={ list.id }>
-            <button onClick={
-              () => this.props.updateParent({
-                modalVisible: true,
-                selectedList: {
-                  id: list.id, title: list.title
-                }
-              })
+            <button draggable={ true }
+                    onClick={
+                      () => this.props.updateParent({
+                        modalVisible: true,
+                        selectedList: {
+                          id: list.id, title: list.title
+                        }
+                    })
             }>
               { list.title }
             </button>

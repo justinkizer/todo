@@ -22,7 +22,7 @@ class MainPage extends React.Component {
   }
 
   changeBackground(backgroundNum) {
-    document.getElementById('page_body').className='bg'+backgroundNum;
+    document.getElementById('page_body').className = 'bg'+backgroundNum;
   }
 
   updateParent() {

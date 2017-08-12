@@ -180,7 +180,7 @@ $lighter-text-shadow:
   position: relative;
   top: 12%; left: -2%;
   list-style: none;
-  margin-top: 15px;
+  padding-top: 15px;
   padding-bottom: 15px;
   border-bottom: 2px dotted white;
   width: 96%;
@@ -202,6 +202,18 @@ $lighter-text-shadow:
   width: 98.75%;
   font-family: Helvetica;
   color: rgba(0,0,0,0.85);
+}
+
+.lists-nav input:hover, .tasks-nav input:hover:not([id='list_name']) {
+  background-color: rgba(255,255,255, 0.65);
+}
+
+.tasks-nav li:hover:not([class='list-name']):not([class='create-task-li']) {
+  background-color: rgba(255,255,255, 0.25);
+}
+
+.task-darken {
+  background-color: rgba(0,0,0,0.20);
 }
 
 .tasks-nav button {
