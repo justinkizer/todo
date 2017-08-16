@@ -1,5 +1,12 @@
 import React from 'react';
-import { gql, graphql, compose } from 'react-apollo';
+import { compose } from 'react-apollo';
+import { getList } from '../../../app/graphql/queries/lists.js';
+import { updateList } from '../../../app/graphql/mutations/lists.js';
+import {
+  createTask,
+  updateTask,
+  deleteTask
+} from '../../../app/graphql/mutations/tasks.js';
 
 class ListModal extends React.Component {
   constructor(props) {
@@ -53,20 +60,21 @@ class ListModal extends React.Component {
       if (!this.justUpdated && this.changed) {
         if (updateType === 'task') {
           if (!body) { body = this.state[taskId].body; }
-          this.props.updateTaskMutation({
-            variables: {
-              taskId,
-              body,
-              taskOrderNumber
-            }
-          })
-            .then(() => {
-              this.justUpdated = true;
-              this.timers.push(setTimeout(() => {
-                this.justUpdated = false;
-              }, 500));
-              document.activeElement.blur();
-            });
+            this.props.updateTaskMutation({
+              variables: {
+                taskId,
+                body,
+                taskOrderNumber
+              }
+            })
+              .then(() => {
+                this.justUpdated = true;
+                this.changed = false;
+                this.timers.push(setTimeout(() => {
+                  this.justUpdated = false;
+                }, 500));
+                document.activeElement.blur();
+              });
         } else {
           document.getElementById('list_name').disabled = true;
           this.props.updateListMutation({
@@ -82,6 +90,7 @@ class ListModal extends React.Component {
                   title: this.state.title
                 }
               });
+              this.changed = false;
               document.activeElement.blur();
             });
         }
@@ -90,24 +99,41 @@ class ListModal extends React.Component {
     };
   }
 
-  handleDelete(taskId) {
+  handleDelete(taskId, taskOrderNumber) {
     this.props.deleteTaskMutation({
       variables: { taskId: taskId }
     })
       .then(() => {
         this.props.data.refetch();
+        [...this.props.data.list.tasks].forEach(task => {
+          if (task.taskOrderNumber > taskOrderNumber) {
+            this.justUpdated = false;
+            this.changed = true;
+            this.handleUpdate(task.id, 'task', task.taskOrderNumber - 1,
+              task.body
+            )();
+          }
+        });
       });
   }
 
   currentOrder(taskOrderNumber, e) {
     if (taskOrderNumber !== this.currentOrderNumber) {
       this.currentOrderNumber = taskOrderNumber;
-      e.target.parentNode.parentNode.className = 'task-darken';
+      let target = e.target;
+      while (target.nodeName !== 'LI') {
+        target = target.parentNode;
+      }
+      target.className = 'task-darken';
     }
   }
 
   updateOrderNumber(taskId, taskOrderNumber) {
     return () => {
+      let listElements = document.getElementsByClassName('tasks-nav')[0].children;
+      for (let i = 0; i < listElements.length; i++) {
+        listElements[i].classList.remove('task-darken');
+      }
       if (taskOrderNumber !== this.currentOrderNumber) {
         this.changed = true;
         let offset = taskOrderNumber - this.currentOrderNumber;
@@ -162,6 +188,7 @@ class ListModal extends React.Component {
             this.changed = true;
             document.getElementById('list_name').disabled = false;
             document.getElementById('list_name').focus();
+                                         this.timers.push(setTimeout(() => document.activeElement.setSelectionRange(1000,1000), 0));
           }}>
             ✎
           </strong>
@@ -193,44 +220,93 @@ class ListModal extends React.Component {
             return x.taskOrderNumber - y.taskOrderNumber;
           })
             .map(task => {
-              let value = this.state[task.id] ? this.state[task.id].body : null;
-              value = value || task.body;
+              let value;
+              if (typeof this.state[task.id] !== 'undefined') {
+                value = this.state[task.id].body;
+              } else {
+                value = task.body;
+              }
               return (
                 <li key={ task.id }
-                    onDragOver={ e => { e.target.className = 'task-darken'; }}
-                    onDragLeave={ e => { e.target.className = ''; }}
+                    onDragEnter={ e => { if (e.target.nodeName === 'LI') { e.target.className = 'task-darken'; }}}
+                    onDragOver={e => {e.dataTransfer.effectAllowed = "move"; e.preventDefault();}}
+                    onMouseEnter={e => {
+                      let target = e.target;
+                      while (target.nodeName !== 'LI') {
+                        target = target.parentNode;
+                      }
+                      target.className = 'tasks-nav-hover';}}
+                    onMouseLeave={e => {
+                      let target = e.target;
+                      while (target.nodeName !== 'LI') {
+                        target = target.parentNode;
+                      }
+                      target.classList.remove('tasks-nav-hover');}}
                 >
-                  <form onSubmit={ this.handleUpdate(task.id, 'task',
+                  <form onSubmit={  e => {
+                      e.preventDefault();
+                    if (e.target.firstChild.firstChild.value === '') {
+                       this.handleDelete(task.id, task.taskOrderNumber);} else {this.handleUpdate(task.id, 'task',
                                     task.taskOrderNumber
-                                 )}
+                                 )();}}}
                         className='task-item-form'
                   >
-                    <input type='text'
-                           draggable={ true }
-                           onDragOver={
-                             e => this.currentOrder(task.taskOrderNumber, e)
+                    <div draggable={ true }
+                         onDragStart={e => {e.dataTransfer.effectAllowed = "move";}}
+                         onDragEnter={
+                           e => {
+                             this.currentOrder(task.taskOrderNumber, e);
                            }
-                           onDragLeave={
-                             e => {
-                               e.target.parentNode.parentNode.className = '';
+                         }
+                         onDragLeave={
+                           e => {
+                             let target = e.target;
+                             while (target.nodeName !== 'LI') {
+                               target = target.parentNode;
                              }
+                             target.classList.remove('task-darken');
                            }
-                           onDragEnd={ this.updateOrderNumber(task.id,
-                                        task.taskOrderNumber
-                                     )}
-                           onChange={ this.update(task.id, 'task') }
-                           onBlur={ this.handleUpdate(task.id, 'task',
-                                      task.taskOrderNumber
-                                  )}
-                           onFocus={ () => {
-                             this.changed = false;
-                             this.setState({ [task.id]: { body: task.body }});
-                           }}
-                           value={ value }
-                    ></input>
+                         }
+                         onDragEnd={ this.updateOrderNumber(task.id,
+                           task.taskOrderNumber
+                         )}
+                         onMouseUp={ e => {
+                           let target = e.target.type ? e.target : e.target.firstChild;
+                           target.classList.remove('disable-input');
+                           target.focus();
+                         }}
+                         onMouseDown={ e => {
+                           let target = e.target;
+                           while (target.nodeName !== 'INPUT') {
+                             target = target.firstChild;
+                           }
+                           this.setState({ [task.id]: { body: target.value }});
+                         }}
+                    >
+                      <input type='text'
+                             className='disable-input'
+                             onChange={ this.update(task.id, 'task') }
+                             onFocus={ e => {
+                               this.timers.push(
+                                 setTimeout(() => {
+                                   if (typeof document.activeElement.setSelectionRange === 'function') {
+                                      document.activeElement.setSelectionRange(1000,1000);
+                                    }
+                                  }, 0));
+                                }
+                              }
+                             onBlur={ e => {
+                               if (e.target.value === '') { this.handleDelete(task.id, task.taskOrderNumber);} else {
+                                        e.target.className = 'disable-input';
+                                        this.handleUpdate(task.id, 'task',
+                                          task.taskOrderNumber
+                                    )();}}}
+                             value={ value }
+                      ></input>
+                    </div>
                     <button type='button'
                             className='delete-button'
-                            onClick={ () => this.handleDelete(task.id) }
+                            onClick={ () => this.handleDelete(task.id, task.taskOrderNumber) }
                     >
                       <strong>X</strong>
                     </button>
@@ -244,59 +320,7 @@ class ListModal extends React.Component {
 }
 
 const ListModalWithDataAndMutations = compose(
-  graphql(gql`
-    query ($id: Int!) {
-      list(id: $id) {
-        tasks {
-          id
-          body
-          taskOrderNumber
-        }
-      }
-    }`
-  ),
-  graphql(gql`
-    mutation createTask($listId: Int!, $body: String!) {
-      createTask(listId: $listId, body: $body) {
-        id
-        body
-      }
-    }`,
-    { name: 'createTaskMutation' }
-  ),
-  graphql(gql`
-    mutation updateTask($taskId: Int!, $body: String!, $taskOrderNumber: Int!) {
-      updateTask(
-        taskId: $taskId,
-        body: $body,
-        taskOrderNumber: $taskOrderNumber
-      )
-      {
-        id
-        body
-        taskOrderNumber
-      }
-    }`,
-    { name: 'updateTaskMutation' }
-  ),
-  graphql(gql`
-    mutation deleteTask($taskId: Int!) {
-      deleteTask(taskId: $taskId) {
-        id
-        body
-      }
-    }`,
-    { name: 'deleteTaskMutation' }
-  ),
-  graphql(gql`
-    mutation updateList($listId: Int!, $title: String!) {
-      updateList(listId: $listId, title: $title) {
-        id
-        title
-      }
-    }`,
-    { name: 'updateListMutation' }
-  )
+  getList, updateList, createTask, updateTask, deleteTask
 )(ListModal);
 
 export default ListModalWithDataAndMutations;

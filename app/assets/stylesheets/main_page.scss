@@ -204,11 +204,19 @@ $lighter-text-shadow:
   color: rgba(0,0,0,0.85);
 }
 
+.tasks-nav div {
+  width: 98.75%;
+}
+
 .lists-nav input:hover, .tasks-nav input:hover:not([id='list_name']) {
   background-color: rgba(255,255,255, 0.65);
 }
 
-.tasks-nav li:hover:not([class='list-name']):not([class='create-task-li']) {
+.disable-input {
+  pointer-events: none;
+}
+
+.tasks-nav-hover {
   background-color: rgba(255,255,255, 0.25);
 }
 

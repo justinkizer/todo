@@ -1,5 +1,10 @@
 import React from 'react';
-import { gql, graphql, compose } from 'react-apollo';
+import { compose } from 'react-apollo';
+import { getLists } from '../../../app/graphql/queries/lists.js';
+import {
+  createList,
+  deleteList
+} from '../../../app/graphql/mutations/lists.js';
 
 class Lists extends React.Component {
   constructor(props) {
@@ -87,32 +92,7 @@ class Lists extends React.Component {
 }
 
 const ListsWithDataAndMutations = compose(
-  graphql(gql`
-    query {
-      lists {
-        id
-        title
-      }
-    }`
-  ),
-  graphql(gql`
-    mutation createList($title: String!) {
-      createList(title: $title) {
-        id
-        title
-      }
-    }`,
-    { name: 'createListMutation' }
-  ),
-  graphql(gql`
-    mutation deleteList($listId: Int!) {
-      deleteList(listId: $listId) {
-        id
-        title
-      }
-    }`,
-    { name: 'deleteListMutation' }
-  )
+  getLists, createList, deleteList
 )(Lists);
 
 export default ListsWithDataAndMutations;
