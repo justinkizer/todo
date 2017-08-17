@@ -29,3 +29,9 @@ input[draggable="true"] {
   user-select: text;
   -webkit-user-drag: element;
 }
+
+input[disabled], input[disabled="true"], select[disabled='disabled'] {
+  -webkit-text-fill-color: rgba(255, 255, 255, 1);
+  -webkit-opacity: 1;
+  color: rgba(255, 255, 255, 1);
+}

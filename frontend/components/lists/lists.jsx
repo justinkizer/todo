@@ -153,7 +153,7 @@ class Lists extends React.Component {
                    value={ this.state.title }
             ></input>
             <button className='add-button' type='submit'>
-              <strong>✔</strong>
+              <strong>✓</strong>
             </button>
           </form>
         </li>

@@ -273,7 +273,7 @@ class ListModal extends React.Component {
                    value={ this.state.body }
             ></input>
             <button className='add-button' type='submit'>
-              <strong>✔</strong>
+              <strong>✓</strong>
             </button>
           </form>
         </li>
