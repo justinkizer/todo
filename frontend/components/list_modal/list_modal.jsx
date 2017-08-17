@@ -97,7 +97,11 @@ class ListModal extends React.Component {
       if (this.state.title) {
         document.getElementById('list_name').disabled = true;
         this.props.updateListMutation({
-          variables: { listId: this.props.id, title: this.state.title }
+          variables: {
+            listId: this.props.id,
+            title: this.state.title,
+            listOrderNumber: this.props.data.list.listOrderNumber
+          }
         })
         .then(() => {
           this.props.updateParent({
@@ -222,7 +226,7 @@ class ListModal extends React.Component {
   }
 
   setDragAndDropEffect(e) {
-    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.effectAllowed = 'move';
   }
 
   storeActiveTaskBody(task) {

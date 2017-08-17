@@ -11,11 +11,13 @@ export const createList = graphql(gql`
 );
 
 export const updateList = graphql(gql`
-  mutation updateList($listId: Int!, $title: String!) {
-    updateList(listId: $listId, title: $title) {
-      id
-      title
-    }
+  mutation updateList($listId: Int!, $title: String!, $listOrderNumber: Int!) {
+    updateList(listId: $listId, title: $title,
+      listOrderNumber: $listOrderNumber) {
+        id
+        title
+        listOrderNumber
+      }
   }`,
   { name: 'updateListMutation' }
 );

@@ -5,6 +5,7 @@ export const getLists = graphql(gql`
     lists {
       id
       title
+      listOrderNumber
     }
   }`
 );
@@ -12,6 +13,7 @@ export const getLists = graphql(gql`
 export const getList = graphql(gql`
   query ($id: Int!) {
     list(id: $id) {
+      listOrderNumber
       tasks {
         id
         body
