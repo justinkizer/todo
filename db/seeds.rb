@@ -30,11 +30,10 @@ end
   author_id: @picard.id,
   list_order_number: 1
 )
-
 @picards_list_03 = List.create(
   title: 'Tōdō To-Dos',
   author_id: @picard.id,
-  list_order_number: 1
+  list_order_number: 2
 )
 
 picards_list_01_tasks = [
@@ -54,18 +53,9 @@ picards_list_02_tasks = [
 
 picards_list_03_tasks = [
   'Set up batched queries to increase efficiency related to server pings',
-  'Further decompose the code into additional files and import the fragments'
-    .concat(' as necessary (e.g. the gql queries/mutations would be cleaner')
-    .concat(' and more manageable in their own files elsewhere)'),
-  'Implement more graceful fail states (e.g. provide more specific responses,'
-    .concat(' with better presentation, etc.)'),
-  'DRY up more code by combining similar components and forms, potentionally'
-    .concat(' wrapping them in custom HOCs (e.g. the lists/list components,')
-    .concat(' etc.)'),
-  'Add "delete confirmations" modals for lists/tasks deletion',
-  'Add Drag-and-Drop ordering/prioritization for lists/tasks',
-  'Implement a full test suite, using RSPEC, Enzyme, and Jest',
-  'Create Github README'
+  'Implement more graceful fail states (e.g. provide more specific responses)',
+  'Add "delete confirmations" modals for list deletion',
+  'Complete Github README'
 ]
 
 picards_list_01_tasks.each_with_index do |body, index|
