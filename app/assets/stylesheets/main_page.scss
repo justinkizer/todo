@@ -14,10 +14,33 @@ $lighter-text-shadow:
   position: relative;
   min-width: 100vw;
   min-height: 100vh;
-  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.main-page-container > button:hover {
+  cursor: pointer;
+  color: lightgray;
+}
+
+.task-and-nav-column {
+  margin-right: 1%;
+}
+
+.welcome-and-nav-row {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+}
+
+.welcome-and-nav-row > strong {
+  margin-top: 0em;
+  margin-right: 1em;
+  font-family: 'Pacifico', cursive;
+  color: white;
+  font-size: 250%;
+  text-shadow: $text-shadow;
 }
 
 .nav-button-container {
@@ -41,18 +64,23 @@ $lighter-text-shadow:
   padding-right: 0px;
 }
 
-.main-page-container > button:hover {
-  cursor: pointer;
-  color: lightgray;
-}
-
-.main-page-container > strong {
-  margin-top: 0em;
-  margin-right: 1em;
-  font-family: 'Pacifico', cursive;
-  color: white;
-  font-size: 250%;
-  text-shadow: $text-shadow;
+.lists-nav {
+  margin: 0px;
+  -webkit-margin-before: 0px;
+  -webkit-margin-after: 0px;
+  -webkit-margin-start: 0px;
+  -webkit-margin-end: 0px;
+  -webkit-padding-start: 0px;
+  margin-right: auto;
+  height: 100vh;
+  width: 20.58em;
+  background-image: url("https://www.transparenttextures.com/patterns/45-degree-fabric-light.png");
+  background-color: rgba(255,255,255,0.55);
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .lists-nav > li:first-of-type {
@@ -63,39 +91,19 @@ $lighter-text-shadow:
   border-bottom: 2px solid white;
   margin: 0px;
   margin-top: -0.05em;
+  margin-left: -0.2em;
   margin-bottom: 0.5em;
-  margin-left: 0.6em;
   min-height: 0px;
-  width: 65%;
-}
-
-.lists-nav {
-  margin: 0px;
-  -webkit-margin-before: 0px;
-  -webkit-margin-after: 0px;
-  -webkit-margin-start: 0px;
-  -webkit-margin-end: 0px;
-  -webkit-padding-start: 0px;
-  margin-right: auto;
-  width: 20.2%;
-  flex: 0 0.01 18.25em;
-  padding-right: 2.3em;
-  background-image: url("https://www.transparenttextures.com/patterns/45-degree-fabric-light.png");
-  background-color: rgba(255,255,255,0.55);
-  overflow-y: scroll;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
+  width: 57%;
 }
 
 .lists-nav > li {
   flex-shrink: 0;
   list-style: none;
   min-height: 3.15em;
-  margin-left: 0.05em;
+  margin-left: -2.5em;
   border-bottom: 2px dotted white;
-  width: 92%;
+  width: 80%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -149,9 +157,26 @@ $lighter-text-shadow:
   background-color: lightgray;
 }
 
+.lists-nav input:hover, .tasks-nav input:hover:not([id='list_name']) {
+  background-color: rgba(255,255,255, 0.65);
+}
+
+.tasks-nav {
+  height: 87vh;
+  width: 96.25%;
+  background-image: url("https://www.transparenttextures.com/patterns/45-degree-fabric-light.png");
+  background-color: rgba(255,255,255,0.55);
+  overflow-y: scroll;
+  border-radius: 50px;
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-right: 26em;
+}
+
 .tasks-nav > li:first-of-type {
-  position: absolute;
-  top: 0.5%; left: 2%;
   font-family: 'Pacifico', cursive;
   color: white;
   font-size: 250%;
@@ -159,21 +184,12 @@ $lighter-text-shadow:
   border-bottom: 2px solid white;
   height: 11%;
   margin: 0px;
+  margin-top: -1.6em;
   padding: 0px;
-  width: 96%;
-}
-
-.tasks-nav {
-  position: absolute;
-  top: 9.15%; left: 24%;
-  height: 87vh;
-  width: 72.25%;
-  background-image: url("https://www.transparenttextures.com/patterns/45-degree-fabric-light.png");
-  background-color: rgba(255,255,255,0.55);
-  overflow-y: scroll;
-  border-radius: 50px;
+  width: 99.7%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .tasks-nav > li {
@@ -184,10 +200,24 @@ $lighter-text-shadow:
   padding-bottom: 15px;
   border-bottom: 2px dotted white;
   width: 96%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.spacer {
+  width: 1em;
+  flex-shrink: 0;
 }
 
 .tasks-nav > li:last-of-type {
   border-bottom: none;
+}
+
+.tasks-nav div {
+  width: 100%;
 }
 
 .tasks-nav input {
@@ -202,14 +232,6 @@ $lighter-text-shadow:
   width: 98.75%;
   font-family: Helvetica;
   color: rgba(0,0,0,0.85);
-}
-
-.tasks-nav div {
-  width: 98.75%;
-}
-
-.lists-nav input:hover, .tasks-nav input:hover:not([id='list_name']) {
-  background-color: rgba(255,255,255, 0.65);
 }
 
 .disable-input {
@@ -248,6 +270,7 @@ $lighter-text-shadow:
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  width: 100%;
 }
 
 .task-item-form button {
@@ -295,9 +318,7 @@ $lighter-text-shadow:
 }
 
 .close-modal-button {
-  position: absolute;
   max-width: 30px;
-  top: 3%; right: 2%;
 }
 
 .close-modal-button strong {
@@ -318,8 +339,8 @@ $lighter-text-shadow:
 .list-name > strong {
   box-sizing: border-box;
   color: rgba(255,255,255,1);
-  position: absolute;
-  top: -4%; right: 5%;
+  margin-left: auto;
+  padding-right: 0.3em;
 }
 
 .list-name > form > input:focus {
@@ -332,8 +353,6 @@ $lighter-text-shadow:
 }
 
 .list-name > form > input {
-  position: absolute;
-  top: -5%; left: 0%;
   font-family: 'Pacifico', cursive;
   color: white;
   background-color: rgba(255,255,255,0);
@@ -342,5 +361,5 @@ $lighter-text-shadow:
   text-shadow: $text-shadow;
   margin: 0px;
   padding: 0px;
-  width: 96%;
+  width: 177%;
 }

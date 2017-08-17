@@ -41,15 +41,22 @@ class MainPage extends React.Component {
 
     return (
       <div className='main-page-container'>
-        <ListsWithDataAndMutations updateParent={ this.updateParent() }
-                                   selectedList={ this.state.selectedList }
-        />
-        <strong>Welcome, { this.username }!</strong>
-        <nav className='nav-button-container'>
-          <BGButton changeBackground={ this.changeBackground } />
-          <SignOutButton />
-        </nav>
-        { listModal }
+        <div>
+          <ListsWithDataAndMutations updateParent={ this.updateParent() }
+            selectedList={ this.state.selectedList }
+          />
+        </div>
+        <div className='spacer'></div>
+        <div className='task-and-nav-column'>
+          <div className='welcome-and-nav-row'>
+            <strong>Welcome, { this.username }!</strong>
+            <nav className='nav-button-container'>
+              <BGButton changeBackground={ this.changeBackground } />
+              <SignOutButton />
+            </nav>
+          </div>
+          { listModal }
+        </div>
       </div>
     );
   }

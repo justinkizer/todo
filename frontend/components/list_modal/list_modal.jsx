@@ -262,10 +262,10 @@ class ListModal extends React.Component {
             ></input>
           </form>
           <strong onClick={ this.selectListTitle }>✎</strong>
+          <button className='close-modal-button' onClick={ this.closeModal }>
+            <strong>X</strong>
+          </button>
         </li>
-        <button className='close-modal-button' onClick={ this.closeModal }>
-          <strong>X</strong>
-        </button>
         <li key={ 'newTask' } className='create-task-li'>
           <form className='task-create-item-form' onSubmit={ this.createTask }>
             <input onChange={ this.updateInput() }
